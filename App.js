@@ -1,20 +1,19 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+//CONTROL DE VERSIONES DE App.js
+// Tdoas las versiones estaran en la carpeta ./src/versionesApps/[nombre version]
+// Solo puede estar activo un import de MiVersionApp ( resto comentado )
+// Al correr App.js ( en la raiz) con npx expo start , correra la version importada.
+
+
+// import MiVersionApp from './src/versionesApps/AppOriginal';
+// import MiVersionApp from './src/versionesApps/AppV01' // Solo Muestra el titulo de la aplicacion.
+// import MiVersionApp from './src/versionesApps/AppV02'   // Enganchar el formulario
+// import MiVersionApp from './src/components/ContactoForm'  // Visualizar el Formulario ContactoForm
+// import MiVersionApp from './src/versionesApps/AppProbarContactoForm' // Esta version incluye la adicion de contactos a traves del formulario. 
+// import MiVersionApp from './src/versionesApps/AppConFormYCard' //Incluye Formulario ( añadir Contactos)  y Mostrar con Cards
+// import MiVersionApp from './src/versionesApps/App_CR_D_NoPersistencia'  // Version con el delete.
+import MiVersionApp from './src/versionesApps/App_CRUD_Ordenacion';  // Implementando la ordenacion de los contactos.
 
 export default function App() {
-  return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
-  );
-}
+  return (<MiVersionApp />)
+};
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
