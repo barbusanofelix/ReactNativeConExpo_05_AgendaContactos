@@ -3,7 +3,7 @@
 Con las prisas metimos estilos directamente en el código (inline) para la Barra de Búsqueda y el Botón de Ordenación. Vamos a sacarlos de ahí para que el archivo del Padre sea legible y fácil de mantener.
 
 ## 1. Actualizar src/styles/globalStyles.js
-Abre tu archivo de estilos y añade estas reglas. He aprovechado para darle un toque más profesional a la barra de búsqueda:
+Abre el archivo de estilos y añade estas reglas. He aprovechado para darle un toque más profesional a la barra de búsqueda:
 
 ---
 ```js
@@ -46,7 +46,7 @@ export const globalStyles = StyleSheet.create({
 ---
 
 ## 2. Aplicar los estilos en el Padre
-Ahora ve a tu archivo ``App_CRUD_BusquedaModificar.js`` y sustituye esas "dobles llaves" por las nuevas clases:
+Ahora el archivo ``App_CRUD_BusquedaModificar.js`` y sustituye esas "dobles llaves" por las nuevas clases:
 
 ---
 ```jsx
@@ -72,10 +72,3 @@ Ahora ve a tu archivo ``App_CRUD_BusquedaModificar.js`` y sustituye esas "dobles
 ```
 ---
 
-
-🚀 ¿Siguiente paso?
-Si ya has aplicado la limpieza de estilos y la App se sigue viendo bien (o mejor) en tu móvil, estamos listos para el gran salto: La Persistencia.
-
-Para ello, usaremos una librería llamada AsyncStorage. Es como el "Local Storage" de la web pero para móviles. Nos permitirá que los contactos sobrevivan a un cierre de la aplicación.
-
-¿Te parece si empezamos instalando la librería y creando un archivo de "Servicio de Datos" para no ensuciar el componente principal? Así mantenemos la arquitectura modular que tanto nos está ayudando.

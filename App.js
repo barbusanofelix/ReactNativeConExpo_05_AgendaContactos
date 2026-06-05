@@ -13,7 +13,8 @@
 // import MiVersionApp from './src/versionesApps/App_CRUD_Ordenacion';  // Implementando la ordenacion de los contactos.
 // import MiVersionApp from "./src/versionesApps/App_CRUD_BusquedaModificar"; // Implementar Buscar y Modificar
 // import MiVersionApp from "./src/versionesApps/App_CRUD_Persistencia"; // Implementada persistencia, agregar y buscar pero no me gusto la pantalla incluyendo la creacion y buscar.
-import MiVersionApp from "./src/versionesApps/App_CRUD_Persistencia_UX";
+// import MiVersionApp from "./src/versionesApps/App_CRUD_Persistencia_UX";// + Mejora en la interface
+import MiVersionApp from "./src/versionesApps/App_CRUDenDisco_ValConf";
 
 export default function App() {
   return <MiVersionApp />;

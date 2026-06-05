@@ -37,6 +37,18 @@ export default function ContactoForm({
       Alert.alert("Error", "Por favor rellena los campos");
       return;
     }
+
+    // 🔍 EXPRESION REGULAR: ^(inicio) \d(solo dígitos) {7,15}( entre 7 a 15 digítos) $ (fin)
+    const regexTelefono = /^\d{7,15}$/; // La barras invertidas /, al inicio y final, / es para que tome solo ^\d{7,15}$
+
+    if (!regexTelefono.test(telefono.trim())) {
+      Alert.alert(
+        "Formato de Télefono Invalido!!",
+        "Solo numeros entre 7 a 15 dígitos",
+      );
+      return; // Frenamos la ejecucion para que no se guarde.
+    }
+
     //DETECTAMOS SI ES CREACION O EDICION
     if (contactoSeleccionado) {
       // Si estamos editando, enviamos el ID original junto con el nuevo nombre y/o telefono

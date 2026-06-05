@@ -1965,7 +1965,7 @@ Aquí tienes el mapa exacto de conexiones, con los nombres reales de tus archivo
 - Las Variables (Qué viaja): Tres datos sueltos: contactoSeleccionado.id, nombre (nuevo text) y telefono (nuevo text).
 - Receptor (A quién): App_CRUD_BusquedaModificar.js (El Padre)
 - Estación de Destino (Dónde cae): Caen como tres argumentos dentro de la función actualizarContactoGlobal(id, nuevoNombre, nuevoTelefono).
-  🏁 Estación Final: La Consolidación en el Padre
+ ## 🏁 Estación Final: La Consolidación en el Padre
 - Una vez que los tres datos entran a la función actualizarContactoGlobal del Padre, ocurre el procesamiento interno:
 - La variable interna listaModificada se genera usando .map().
 - El estado principal listaContactos se sobrescribe con setListaContactos(listaModificada).

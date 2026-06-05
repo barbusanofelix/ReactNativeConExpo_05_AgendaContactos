@@ -89,16 +89,46 @@ export default function App() {
     setContactoAEditar(null);
   };
 
-  const eliminarContactoGlobal = (idParaEliminar) => {
-    // .filter() recorre todo el array y deja pasar ids distintos a idParaEliminar
-    const listaFiltrada = listaContactos.filter(
-      (contacto) => contacto.id !== idParaEliminar,
+  const eliminarContactoGlobal = (idParaEliminar, nombre) => {
+    // Disparamos una Alerta nativa antes de tocar le RAM o el Disco
+    // Si se esta Editando y tratando de eliminar al mismo tiempo generamos un mensaje
+    let mensaje = "";
+
+    // Si estamos Editando y borrando , al mismo tiempo será true.
+    estaEditandoEliminado =
+      contactoAEditar && contactoAEditar.id === idParaEliminar;
+
+    if (estaEditandoEliminado) {
+      mensaje = `Tambien estas ✏️ a ${nombre}, pero 🗑️ es prioritario`;
+    }
+
+    Alert.alert(
+      "⚠️ Confirmar eliminacion de Contacto",
+      `Seguro quieres eliminar a ${nombre}. \nNo se puede deshacer!!\n\n${mensaje}`,
+      [
+        {
+          text: "Cancelar",
+          style: "cancel", // No hacer nada...cierra la alerta de forma segura
+        },
+        {
+          text: "Eliminar",
+          style: "destructive", // En IOS pinta de rojo el boton
+          onPress: () => {
+            // Si el usuario confirma pues borramos y guardamos
+            const listaActualizada = listaContactos.filter(
+              (contacto) => contacto.id !== idParaEliminar,
+            );
+            setListaContactos(listaActualizada);
+            // No se necesita guardar en disco porque de eso ya esta encargado useEffect
+            //🛡️ CONTROL DE SEGURIDAD: Si el contacto borrado era el que se estaba editando..
+            if (estaEditandoEliminado) {
+              setContactoAEditar(null); // Eliminamos la indicacion de edicion del contacto
+              setMostrarFormulario(false); // Cerramos el formulario de edicion porque borramos el contacto.
+            }
+          },
+        },
+      ],
     );
-
-    // Actualizamos la lista en la RAM con el nuevo array donde ya no existe el contacto
-    setListaContactos(listaFiltrada);
-
-    //Aqui irá a futuro la grabacion al disco duro ( Persistencia)
   };
 
   const seleccionarParaEditar = (contacto) => {
@@ -148,14 +178,11 @@ export default function App() {
             onAgregarContacto={agregarContactoGlobal}
             contactoSeleccionado={contactoAEditar}
             onActualizarContacto={actualizarContactoGlobal}
-            onCancelar={()=> {
+            onCancelar={() => {
               setMostrarFormulario(false);
               setContactoAEditar(null); // Limpiamos el iman por seguridad al cerrar
             }}
           />
-          
-
-          
         </View>
       ) : (
         // SCENARIO B: Si el formulario está CERRADO, mostramos las herramientas de búsqueda y el botón +

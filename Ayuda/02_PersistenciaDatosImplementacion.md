@@ -726,13 +726,119 @@ return (
 
 ---
 
-🔍 Puntos clave de este bloque:
-El operador ternario mostrarFormulario ? (...) : (...): Divide limpiamente tu pantalla en dos mitades exclusivas. O se ve el editor, o se ven los controles de búsqueda.
+## 🔍 PUNTOS CLAVES PARA MOSTRAR/OCULTAR EL FORMULARIO DE AGREGAR/EDITAR UN CONTACTO:
+
+`El operador ternario mostrarFormulario ? (...) : (...)`: Divide limpiamente tu pantalla en dos mitades exclusivas. O se ve el editor, o se ven los controles de búsqueda.
+
+- mostrarFormulario es un useState boolenao ( True / false ). En true se vera el formulario.
 
 onCancelar en acción:
-Al pulsar la ❌ interna del hijo, se ejecuta la función de flecha que pusimos en el escenario A, regresando mostrarFormulario a false y bajando el telón.
+Al pulsar la ❌ interna del hijo, ( ControlFoem.js ) se ejecuta la función de flecha que pusimos en el escenario A, regresando mostrarFormulario a false y bajando el telón. ( cambiar los estados para no mostrar el formulario y no editar un contacto)
+
+- Eso de bajar el telon es hacer:
+  - setMostrarFormulario(false);
+  - setContactoAEditar(null);
 
 La lista es un elemento común:
 Como la FlatList está fuera del bloque condicional, da igual si estás creando, editando o buscando; tus tarjetas de contactos siempre se pintarán abajo de forma estable.
 
-Prueba a guardar el archivo con este return en tu versión UX y verifica en tu teléfono cómo la experiencia de usuario cambia drásticamente a una mucho más fluida. ¡Me avisas cuando esté listo!
+## 🗺️ REPASO Técnico por el Código de Persistencia y UX
+
+Antes de reorganizár la UI, vamos a hacer una radiografía completa y paso a paso de lo que está ocurriendo bajo el capó del archivo `App_CRUD_Persistencia_UX.js.`
+
+### 1. El Bloque de los Almacenes de Memoria (Los Estados)
+
+En la parte superior del componente tenemos definidos los estados esenciales. Son como variables vivas en la memoria RAM que, al cambiar, obligan a la pantalla a redibujarse:
+
+- listaContactos:
+  El array de objetos principal. Es la base de datos viva.
+
+- direccionOrden:
+  Controla si el orden es neutro, 'asc' o 'desc'.
+
+- textoBusqueda:
+  Registra cada letra que el usuario teclea en tiempo real.
+
+- contactoAEditar:
+  El "imán" o contenedor temporal que guarda el objeto del contacto que se pulsó con el lápiz.
+
+- mostrarFormulario:
+  El booleano (true/false) que actúa como interruptor de los escenarios de la pantalla.
+
+2. Las Dos Tuberías ( conexiones ) del Disco Duro (Los useEffect)
+   Aquí está el cerebro de la persistencia gracias al Gestor de Almacenamiento (`contactoService`):
+
+La Tubería de Entrada (Carga Inicial):
+
+---
+
+```jsx
+useEffect(() => {
+  const cargarContactosDelDisco = async () => {
+    const contactosGuardados = await contactoService.obtener();
+    setListaContactos(contactosGuardados);
+  };
+  cargarContactosDelDisco();
+}, []);
+```
+
+---
+
+- Mecánica:
+  Al encender la App, los corchetes vacíos [] disparan esta función una sola vez. Va al disco en segundo plano (async/await), saca el texto plano, lo parsea a objetos y lo sube a la RAM con `setListaContactos`.
+
+El guardado automatico de datos en la base de datos (La Tubería de Salida (El Guardián Automático )):
+
+---
+
+```jsx
+useEffect(() => {
+  if (listaContactos.length > 0) {
+    contactoService.guardar(listaContactos);
+  }
+}, [listaContactos]);
+```
+
+---
+
+- Mecánica:
+  Este vigila exclusivamente a [listaContactos]. Cada vez que agregas, borras o editas un contacto, la RAM cambia, este efecto se activa, transforma la lista en texto plano (JSON.stringify) y la graba a fuego en el disco.
+
+### 3. Filtrado de la lista de contactos : La Fábrica de Filtros (El Procesamiento en Caliente)
+
+Antes de pintar nada en la interfaz, el programa ejecuta una línea crucial:
+
+---
+
+```jsx
+const contactosFiltrados = listaContactos
+  .filter(c => c.nombre.toLowerCase().includes(textoBusqueda.toLowerCase()))
+  .sort(...)
+
+```
+
+---
+
+- Mecánica:
+  Nunca modificamos la base de datos original (listaContactos) al buscar o al ordenar. En su lugar, creamos un sub-array derivado en el aire (`contactosFiltrados`). Si el usuario escribe una "F", este filtro procesa la RAM y genera una lista donde solo está Felix.
+
+### 4. El Conmutador de Escenarios ( Vista en pantalla ) (El return Condicional)
+
+Gracias al operador ternario, la interfaz se comporta de manera inteligente:
+
+- Si mostrarFormulario es true:
+  React desmonta la barra de búsqueda para que no estorbe y monta el hijo `<ContactoForm />`. Le inyecta por la tubería contactoSeleccionado el valor de `contactoAEditar`. Si está lleno, el formulario se rellena solo; si es nulo, aparece vacío para crear. Cuando pulsas la ❌ interna, se activa la `prop onCancelar`, el Padre cambia el estado a false y bajamos el telón de edición.
+
+Si ``mostrarFormulario ``es false:
+React monta el bloque con la barra de búsqueda y el botón verde ➕. Al presionarlo, simplemente cambia el estado a true, levantando el escenario de creación.
+
+El elemento neutro (FlatList):
+Está al final de todo, fuera de las condiciones. Así, no importa si estás viendo la búsqueda o editando, la lista de contactos siempre es visible en la parte inferior de la pantalla actualizándose en tiempo real.
+
+# LOGROS
+
+- Implementar la persistencia de datos con AsyncStorage y un gestor de almacenamiento modular.
+
+- Crear un sistema de escenarios condicionales que adapta la pantalla según si el usuario está buscando, creando o editando.
+
+- Pulir el diseño integrando botones de control directamente en el formulario para una experiencia más fluida.

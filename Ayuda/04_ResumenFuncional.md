@@ -1,4 +1,4 @@
-## 🪜 Parte 2: El Resumen Funcional (Consolidación)
+## 🪜 Parte 1: El Resumen Funcional (Consolidación)
 
 Veamos qué hace la App ahora mismo en la RAM.
 Tenemos el control de estos 4 pilares:

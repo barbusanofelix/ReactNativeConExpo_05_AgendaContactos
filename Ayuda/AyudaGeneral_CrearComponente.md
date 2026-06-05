@@ -32,7 +32,8 @@ Este es el concepto que más cuesta asimilar en React: Cuando el Hijo necesita e
    └── Recibe la propiedad: `function Hijo({ enviarPaquete })`
    └── Captura sus inputs locales con su propio useState.
    └── Al pulsar el botón, ejecuta la propiedad: `enviarPaquete(dato1, dato2);`
-🚨 La Regla de Oro de la Inmutabilidad en el Padre:
+
+## 🚨 La Regla de Oro de la Inmutabilidad en el Padre:
 Cuando la función del Padre recibe esos datos, **nunca hace un .push() al array original**. Un programador siempre **crea una foto nueva usando el operador spread ([...]):**
 
 ```js

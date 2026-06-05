@@ -28,7 +28,7 @@ export default function ContactoCard({
       {/* Botón de borrar (de momento sin lógica profunda) */}
       <TouchableOpacity
         style={styles.actionBoton}
-        onPress={() => onBorrarContacto(contacto.id)}
+        onPress={() => onBorrarContacto(contacto.id, contacto.nombre)}
       >
         <Text style={styles.actionTexto}>❌</Text>
       </TouchableOpacity>
