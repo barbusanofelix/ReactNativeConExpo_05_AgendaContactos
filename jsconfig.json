@@ -1,0 +1,9 @@
+{
+  "compilerOptions": {
+    "target": "ES6",
+    "module": "commonjs",
+    "jsx": "react-native",
+    "allowSyntheticDefaultImports": true
+  },
+  "exclude": ["node_modules", ".expo", ".expo-shared"]
+}

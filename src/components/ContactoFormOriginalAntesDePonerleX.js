@@ -11,18 +11,18 @@ import {
 } from "react-native";
 import { colores } from "../styles/globalStyles";
 
-// 1. Recibimos las propiedades en el argumento de la funcion (Añadimos onCancelar)
+// 1. Recibimos la propiedad ( La tuberia de conexion Padre-Hijo)en el argumento de la funcion
 export default function ContactoForm({
   onAgregarContacto,
   contactoSeleccionado,
-  onActualizarContacto, // nueva propiedad para actualizar.
-  onCancelar, // ◄--- NUEVA: Tubería para que el Padre cierre el formulario
+  onActualizarContacto    // nueva propiedad para actualizar.
 }) {
   // 2. Creamos los 2 almacenes temporales para el texto
   const [nombre, setNombre] = useState("");
   const [telefono, setTelefono] = useState("");
 
   // Usamos useEffect para detectar que contactoSeleccionado cambio en ContactoCard.
+  // Inicialmente era nulo pero al seleccionar uno se le asigna ese valor y cambia.
   useEffect(() => {
     if (contactoSeleccionado) {
       // Si el padre nos mando un contacto, rellenamos el input
@@ -31,9 +31,9 @@ export default function ContactoForm({
     }
   }, [contactoSeleccionado]); // La dependencia : Vigila el cambio de contactoSeleccionado
 
-  // 3. Funcion para procesar el guardado o actualizacion
+  // 3. Funcion de prueba para verificar que guardar.a bien.
   const presionarGuardar = () => {
-    if (nombre.trim() === "" || telefono.trim() === "") {
+    if (nombre.trim === "" || telefono.trim() === "") {
       Alert.alert("Error", "Por favor rellena los campos");
       return;
     }
@@ -41,10 +41,10 @@ export default function ContactoForm({
     if (contactoSeleccionado) {
       // Si estamos editando, enviamos el ID original junto con el nuevo nombre y/o telefono
       onActualizarContacto(contactoSeleccionado.id, nombre, telefono);
-    } else {
+    } else{
       onAgregarContacto(nombre, telefono);
     }
-
+  
     //Limpiamos los inputs, sea actualizar o guardar
     setNombre("");
     setTelefono("");
@@ -52,16 +52,6 @@ export default function ContactoForm({
 
   return (
     <View style={styles.formContainer}>
-      {/* ◄--- NUEVO: Cabecera interna del formulario para la X de cierre */}
-      <View style={styles.cabeceraForm}>
-        <Text style={styles.tituloForm}>
-          {contactoSeleccionado ? "📝 Editar Contacto" : "✨ Nuevo Contacto"}
-        </Text>
-        <TouchableOpacity onPress={onCancelar}>
-          <Text style={styles.botonCerrarX}>❌</Text>
-        </TouchableOpacity>
-      </View>
-
       <TextInput
         style={styles.input}
         placeholder="Nombre del contacto"
@@ -77,7 +67,7 @@ export default function ContactoForm({
         value={telefono} // <- Vinculamos el valor al useState telefono }
         onChangeText={setTelefono} // <- Cada numero cambia el estado
       />
-      {/* Conectamos el boton a nuestra funcion.*/}
+      {/* Conectamos el boton a nuestra funcion de prueba.*/}
       <TouchableOpacity style={styles.boton} onPress={presionarGuardar}>
         {/* Si hay un contacto seleccionado , el boton cambia a Actualizar */}
         <Text style={styles.botonTexto}>
@@ -94,7 +84,7 @@ export default function ContactoForm({
 const styles = StyleSheet.create({
   formContainer: {
     backgroundColor: colores.blanco,
-    padding: 5,
+    padding: 15,
     borderRadius: 10,
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
@@ -102,24 +92,6 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
     elevation: 3, // Sombra para Android
     marginBottom: 20,
-  },
-  // ◄--- NUEVO: Fila para separar el título de la X
-  cabeceraForm: {
-    flexDirection: "row",
-    justifyContent: "space-between", // Empuja el texto a la izquierda y la X a la derecha
-    alignItems: "center",
-    marginBottom: 8, // Espacio antes del primer TextInput
-  },
-  // ◄--- NUEVO: Estilo del pequeño texto de estado interno
-  tituloForm: {
-    fontSize: 16,
-    fontWeight: "bold",
-    color: colores.primario,
-  },
-  // ◄--- NUEVO: Espaciado táctil para que sea fácil pulsar la X
-  botonCerrarX: {
-    fontSize: 16,
-    padding: 5,
   },
   input: {
     borderWidth: 1,
